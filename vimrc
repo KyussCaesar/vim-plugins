@@ -28,8 +28,7 @@ execute pathogen#infect()
 " cs{old surrounding}{new surrounding}
 " ds{surrounding}
 
-filetype plugin on
-
+filetype plugin indent on
 syntax on
 
 " Use Vim as man-pager
@@ -39,9 +38,10 @@ set keywordprg=:Man
 
 " this has fucked me up too many times.
 inoremap zE zR
+nnoremap zE zR
 
 " navigation and keybindings
-" {
+" {       
 
 " navigate tabs
 nnoremap <F2> :tabp<CR>
@@ -60,18 +60,29 @@ map <ScrollWheelUp> 3<C-Y>
 map <ScrollWheelDown> 3<C-E>
 
 " window navigation
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+inoremap <C-h> <C-w>h
+inoremap <C-j> <C-w>j
+inoremap <C-k> <C-w>k
+inoremap <C-l> <C-w>l
+
+" navigate from terminal windows
+tnoremap <C-h> <C-w>h
+tnoremap <C-j> <C-w>j
+tnoremap <C-k> <C-w>k
+tnoremap <C-l> <C-w>l
 
 " quicker leave visual mode
 vnoremap i <ESC>i
-vnoremap : <ESC>:
 
 " nagivate wrapped lines properly
 nnoremap j gj
 nnoremap k gk
+
 
 " Mappings for writing HTML
 " these mostly just auto-complete a tag
@@ -124,6 +135,8 @@ function ProseBindings()
     nnoremap <buffer> ]g <Plug>(grammarous-move-to-next-error)
     nnoremap <buffer> [g <Plug>(grammarous-move-to-previous-error)
 
+    nnoremap <C-S-K> :Vimwiki2HTML<CR>
+
     " setlocal formatoptions=ant
     setlocal textwidth=80
     setlocal noautoindent
@@ -155,17 +168,16 @@ set wildmenu
 set number
 
 set expandtab
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 set autoindent
-set smartindent
 
 set virtualedit=all
 
 set scrolloff=12
 
-set wrap
+set nowrap
 set linebreak
 set showbreak=>
 
@@ -211,15 +223,15 @@ function DoHighlights()
 	highlight LineNr ctermfg=Gray
 	highlight Folded ctermfg=DarkCyan ctermbg=Black
 	highlight FoldColumn ctermfg=DarkCyan ctermbg=Black
-    highlight PreProc ctermfg=DarkGray
+  highlight PreProc ctermfg=DarkGray
 	highlight MatchParen cterm=underline,bold ctermfg=Magenta ctermbg=LightMagenta
 	highlight vimComment ctermfg=Gray
 
-    " git gutter
-    highlight SignColumn ctermbg=Black
-    highlight GitGutterAdd ctermfg=Green
-    highlight GitGutterDelete ctermfg=Red
-    highlight GitGutterChange ctermfg=Yellow
+  " git gutter
+  highlight SignColumn ctermbg=Black
+  highlight GitGutterAdd ctermfg=Green
+  highlight GitGutterDelete ctermfg=Red
+  highlight GitGutterChange ctermfg=Yellow
 
     " C
 	highlight cComment ctermfg=DarkGray
@@ -273,11 +285,12 @@ function DoHighlights()
 	highlight htmlArg ctermfg=Blue
 	highlight htmlComment ctermfg=Grey
 
-    " Spellck
-    highlight SpellBad cterm=bold ctermfg=Red ctermbg=Black
-    highlight SpellCap ctermfg=White ctermbg=Black
-    highlight SpellRare ctermfg=White ctermbg=Black
-    highlight SpellLocal ctermfg=White ctermbg=Black
+  " Spellck
+  highlight SpellBad cterm=bold ctermfg=Red ctermbg=Black
+  highlight SpellCap ctermfg=White ctermbg=Black
+  highlight SpellRare ctermfg=White ctermbg=Black
+  highlight SpellLocal ctermfg=White ctermbg=Black
+
 endfunction
 
 " end highlighting }
@@ -288,23 +301,43 @@ endfunction
 autocmd VimEnter * call DoHighlights()
 autocmd BufEnter *.html call HtmlBindings()
 autocmd BufEnter makefile :setlocal noexpandtab
+autocmd BufEnter Makefile :setlocal noexpandtab
 autocmd BufEnter *.md call ProseBindings()
 autocmd BufEnter *.tex call ProseBindings()
 autocmd BufEnter *.latex call ProseBindings()
+autocmd BufEnter *.wiki call ProseBindings()
+autocmd BufEnter nginx.conf setfiletype nginx 
 
+function ForceTabStop()
+  set tabstop=2
+  set softtabstop=2
+  set shiftwidth=2
+endfunction
+
+" turn off underscore to arrow conversion and set tabstop
+function UnFuckR()
+  call ForceTabStop()
+  let R_assign=2
+endfunction
+
+function UnFuckPython()
+  set tabstop=4
+  set softtabstop=4
+  set shiftwidth=4
+endfunction
+
+" Force tabstop to my preferred values
+" Sometimes it gets overidden by filetype plugins
+autocmd BufEnter *.R call UnFuckR()
+autocmd BufEnter *.py call UnFuckPython()
+autocmd BufEnter *.rs call ForceTabStop()
+autocmd BufEnter *.yml call ForceTabStop()
+autocmd BufEnter *.yaml call ForceTabStop()
 
 " end autocmds }
 
 " other functions
 " {
-
-" Saves a windows-compatible version.
-function Save()
-	execute ":set fileformat=dos"
-	execute ":w! %_dos"
-	execute ":set fileformat=unix"
-endfunction
-command -nargs=0 Winsave :call Save() 
 
 function CppOpen(argument)
     execute "tabedit " . a:argument . ".h"
@@ -314,6 +347,22 @@ command -nargs=1 -complete=file CppOpen :call CppOpen(<f-args>)
 
 command Vimrc execute ":edit ~/.vimrc"
 command Bashrc execute ":edit ~/.bashrc"
+
+function Author()
+  normal Aauthor: Antony Southworth <antony.southworth@quantiful.co.nz>
+  normal gcc
+endfunction
+
+function Created()
+  read! date +'\%Y-\%m-\%d'
+  normal ICreated: 
+  normal gcc
+endfunction
+
+function AuthorCreated()
+  call Author()
+  call Created()
+endfunction
 
 " end random functions }
 
