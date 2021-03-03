@@ -83,7 +83,6 @@ vnoremap i <ESC>i
 nnoremap j gj
 nnoremap k gk
 
-
 " Mappings for writing HTML
 " these mostly just auto-complete a tag
 function HtmlBindings()
@@ -190,6 +189,8 @@ set backspace=indent,eol,start
 set display+=lastline
 
 set mouse=a
+
+set smartcase
 
 " Statusline
 set laststatus=2
@@ -328,11 +329,9 @@ endfunction
 
 " Force tabstop to my preferred values
 " Sometimes it gets overidden by filetype plugins
+autocmd BufEnter * call ForceTabStop()
 autocmd BufEnter *.R call UnFuckR()
 autocmd BufEnter *.py call UnFuckPython()
-autocmd BufEnter *.rs call ForceTabStop()
-autocmd BufEnter *.yml call ForceTabStop()
-autocmd BufEnter *.yaml call ForceTabStop()
 
 " end autocmds }
 
