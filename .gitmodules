@@ -6,10 +6,10 @@
 	url = git://github.com/altercation/vim-colors-solarized.git
 [submodule "bundle/vim-fugitive"]
 	path = bundle/vim-fugitive
-	url = https://github.com/tpope/vim-fugitive
+	url = git://github.com/tpope/vim-fugitive
 [submodule "bundle/vim-surround"]
 	path = bundle/vim-surround
-	url = https://github.com/tpope/vim-surround
+	url = git://github.com/tpope/vim-surround
 [submodule "bundle/vim-gitgutter"]
 	path = bundle/vim-gitgutter
 	url = git://github.com/airblade/vim-gitgutter.git
@@ -24,7 +24,16 @@
 	url = git://github.com/godlygeek/tabular.git
 [submodule "bundle/Nvim-R"]
 	path = bundle/Nvim-R
-	url = https://github.com/jalvesaq/Nvim-R.git
+	url = git://github.com/jalvesaq/Nvim-R.git
 [submodule "bundle/vim-grammarous"]
 	path = bundle/vim-grammarous
-	url = git@github.com:rhysd/vim-grammarous.git
+  url = git://github.com:rhysd/vim-grammarous.git
+[submodule "bundle/vim-parinfer"]
+  path = bundle/vim-parinfer
+  url = git://github.com/bhurlow/vim-parinfer.git
+[submodule "bundle/vimwiki"]
+  path = bundle/vimwiki
+  url = git://github.com/vimwiki/vimwiki.git
+[submodule "bundle/vlime"]
+  path = bundle/vlime
+  url = git://github.com/vlime/vlime.git
